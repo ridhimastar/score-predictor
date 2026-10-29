@@ -4,20 +4,16 @@ import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LinearRegression
 
-# Load CSV, handling common encodings
-try:
-    df = pd.read_csv("data.csv", encoding="utf-8")
-except UnicodeDecodeError:
-    try:
-        df = pd.read_csv("data.csv", encoding="cp1252")
-    except UnicodeDecodeError:
-        df = pd.read_csv("data.csv", encoding="latin1")
+# Training data
+df = pd.DataFrame({
+    "HoursStudied": [1.5, 3.2, 5, 7.1, 8.5, 2.5, 4.5, 5.5, 6.2, 3.5],
+    "ExamScore": [30, 50, 75, 85, 95, 63, 78, 86, 80, 72]
+})
 
-# Prepare data
+# Prepare and train model
 X = df[["HoursStudied"]]
 y = df["ExamScore"]
 
-# Train model
 X_train, X_test, y_train, y_test = train_test_split(
     X, y, test_size=0.2, random_state=42
 )
@@ -36,9 +32,9 @@ hours = st.number_input(
 )
 
 if st.button("Predict Score"):
-    prediction_data = pd.DataFrame({"HoursStudied": [hours]})
-    predicted_score = model.predict(prediction_data)[0]
-    st.success(f"Predicted score: {predicted_score:.2f}")
+    input_data = pd.DataFrame({"HoursStudied": [hours]})
+    prediction = model.predict(input_data)[0]
+    st.success(f"Predicted score: {prediction:.2f}")
 
 st.write("### Sample Training Data")
 st.dataframe(df)
